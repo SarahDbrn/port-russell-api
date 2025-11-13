@@ -3,7 +3,22 @@ const router = express.Router();
 const User = require('../models/User');
 const auth = require('../middleware/authMiddleware');
 
-// Toutes les routes users sont protégées
+// ⬇️ 1) Route de création d'utilisateur SANS auth (pour pouvoir créer le premier compte)
+// POST /users
+router.post('/', async (req, res) => {
+  try {
+    const user = new User(req.body); // username, email, password
+    await user.save();
+    res.status(201).json({
+      message: 'Utilisateur créé',
+      user: { username: user.username, email: user.email }
+    });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+// ⬇️ 2) À partir d'ici, toutes les routes nécessitent d'être connecté
 router.use(auth);
 
 // GET /users
@@ -17,17 +32,6 @@ router.get('/:email', async (req, res) => {
   const user = await User.findOne({ email: req.params.email }).select('-password');
   if (!user) return res.status(404).json({ message: 'Utilisateur non trouvé' });
   res.json(user);
-});
-
-// POST /users
-router.post('/', async (req, res) => {
-  try {
-    const user = new User(req.body); // username, email, password
-    await user.save();
-    res.status(201).json({ message: 'Utilisateur créé', user: { username: user.username, email: user.email } });
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
 });
 
 // PUT /users/:email
