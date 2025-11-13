@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser');
 const connectDB = require('./config/db');
 
 dotenv.config();
+console.log('MONGO_URI utilisé :', process.env.MONGO_URI);
 connectDB();
 
 const app = express();
