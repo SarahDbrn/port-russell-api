@@ -1,4 +1,3 @@
-// routes/authRoutes.js (profites-en pour corriger le nom du fichier aussi 🙂)
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
