@@ -1,3 +1,4 @@
+// models/User.js
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
@@ -10,27 +11,26 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
-    unique: true, // unicité
-    match: [/^\S+@\S+\.\S+$/, 'Email invalide']
+    unique: true,  // unicité demandée
+    match: /.+\@.+\..+/
   },
   password: {
     type: String,
     required: true,
-    minlength: 8 // longueur mini
+    minlength: 6   // règle “de bon sens”
   }
 });
 
 // Hash du mot de passe avant sauvegarde
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
+  this.password = await bcrypt.hash(this.password, 10);
   next();
 });
 
 // Méthode pour comparer le mot de passe
-userSchema.methods.matchPassword = function (enteredPassword) {
-  return bcrypt.compare(enteredPassword, this.password);
+userSchema.methods.comparePassword = function (candidate) {
+  return bcrypt.compare(candidate, this.password);
 };
 
 module.exports = mongoose.model('User', userSchema);
