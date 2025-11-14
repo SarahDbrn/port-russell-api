@@ -1,0 +1,26 @@
+<%- include('layout'); %>
+
+<h1>Gestion des réservations</h1>
+
+<table border="1" cellpadding="5">
+  <thead>
+    <tr>
+      <th>Catway</th>
+      <th>Client</th>
+      <th>Bateau</th>
+      <th>Début</th>
+      <th>Fin</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% reservations.forEach(r => { %>
+      <tr>
+        <td><%= r.catwayNumber %></td>
+        <td><%= r.clientName %></td>
+        <td><%= r.boatName %></td>
+        <td><%= r.startDate.toLocaleDateString('fr-FR') %></td>
+        <td><%= r.endDate.toLocaleDateString('fr-FR') %></td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>

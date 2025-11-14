@@ -1,0 +1,20 @@
+<%- include('layout'); %>
+
+<h1>Gestion des utilisateurs</h1>
+
+<table border="1" cellpadding="5">
+  <thead>
+    <tr>
+      <th>Nom</th>
+      <th>Email</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% users.forEach(u => { %>
+      <tr>
+        <td><%= u.username %></td>
+        <td><%= u.email %></td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>
