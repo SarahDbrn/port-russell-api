@@ -4,6 +4,10 @@ const cookieParser = require('cookie-parser');
 const path = require('path');
 const connectDB = require('./config/db');
 
+const Catway = require('./models/Catway');
+const Reservation = require('./models/Reservation');
+const User = require('./models/User');
+
 dotenv.config();
 connectDB();
 
@@ -33,16 +37,21 @@ app.use(authRoutes);
 
 // Pages “front”
 app.get('/', (req, res) => {
-  // si tu lis déjà le cookie pour l’utilisateur, tu peux le passer à la vue
   res.render('index', { user: req.user || null });
 });
 
-app.get('/dashboard', requireAuth, (req, res) => {
-  // Ici tu iras chercher : réservations en cours, date du jour, etc.
+app.get('/dashboard', requireAuth, async (req, res) => {
+  const today = new Date();
+
+  const reservations = await Reservation.find({
+    startDate: { $lte: today },
+    endDate: { $gte: today }
+  });
+
   res.render('dashboard', {
     user: req.user,
-    today: new Date(),
-    reservations: [] // à remplacer par un find() en base
+    today,
+    reservations
   });
 });
 
@@ -58,3 +67,19 @@ app.use('/catways/:id/reservations', requireAuth, reservationRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Serveur lancé sur le port ${PORT}`));
+
+// Pages EJS protégées
+app.get('/catways-page', requireAuth, async (req, res) => {
+  const catways = await Catway.find();
+  res.render('catways', { user: req.user, catways });
+});
+
+app.get('/reservations-page', requireAuth, async (req, res) => {
+  const reservations = await Reservation.find();
+  res.render('reservations', { user: req.user, reservations });
+});
+
+app.get('/users-page', requireAuth, async (req, res) => {
+  const users = await User.find().select('-password');
+  res.render('users', { user: req.user, users });
+});

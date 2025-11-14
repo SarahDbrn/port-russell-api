@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Port de Plaisance Russell</title>
+</head>
+<body>
+  <h1>Application de gestion des catways – Port Russell</h1>
+  <p>Connectez-vous pour accéder au tableau de bord et gérer les catways, réservations et utilisateurs.</p>
+
+  <% if (typeof error !== 'undefined') { %>
+    <p style="color:red;"><%= error %></p>
+  <% } %>
+
+  <form action="/login" method="POST">
+    <label>Email :</label>
+    <input type="email" name="email" required>
+
+    <label>Mot de passe :</label>
+    <input type="password" name="password" required>
+
+    <button type="submit">Se connecter</button>
+  </form>
+
+  <p><a href="/docs">Consulter la documentation de l'API</a></p>
+</body>
+</html>

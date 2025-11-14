@@ -25,7 +25,7 @@ router.post('/login', async (req, res) => {
       });
     }
 
-    const isMatch = await user.matchPassword(password); // ✅ ICI
+  const isMatch = await user.comparePassword(password);
     if (!isMatch) {
       return res.status(401).render('index', {
         error: 'Mot de passe incorrect',

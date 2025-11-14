@@ -1,0 +1,148 @@
+<%- include('partials/header'); %>
+
+<h1>Documentation de l’API – Port de Plaisance Russell</h1>
+
+<p>
+  Cette API privée permet à la capitainerie du Port Russell de gérer :
+  <strong>les utilisateurs</strong>, <strong>les catways</strong> et <strong>les réservations</strong>.
+</p>
+
+<hr>
+
+<h2>Authentification</h2>
+
+<p>L’API utilise des <strong>JWT</strong> (JSON Web Tokens).</p>
+
+<ul>
+  <li><strong>POST /login</strong>  
+    <br>Authentifie un utilisateur et renvoie un cookie HTTP-only contenant le token.
+  </li>
+  <li><strong>GET /logout</strong>  
+    <br>Supprime le cookie du token.
+  </li>
+</ul>
+
+<p>Le token est transmis automatiquement dans un cookie si vous utilisez l’interface web.  
+Pour les requêtes API (Postman / Thunder Client), vous pouvez l’envoyer dans un header : </p>
+
+<pre>
+Authorization: Bearer &lt;token&gt;
+</pre>
+
+<hr>
+
+<h2>Ressource : Catways</h2>
+
+<p>Les catways représentent les petits appontements disponibles au port.</p>
+
+<table border="1" cellpadding="5">
+  <thead>
+    <tr>
+      <th>Méthode</th>
+      <th>Route</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GET</td>
+      <td>/catways</td>
+      <td>Liste tous les catways</td>
+    </tr>
+    <tr>
+      <td>GET</td>
+      <td>/catways/:id</td>
+      <td>Récupère un catway selon son numéro</td>
+    </tr>
+    <tr>
+      <td>POST</td>
+      <td>/catways</td>
+      <td>Crée un nouveau catway</td>
+    </tr>
+    <tr>
+      <td>PUT</td>
+      <td>/catways/:id</td>
+      <td>Met à jour uniquement l’état du catway</td>
+    </tr>
+    <tr>
+      <td>DELETE</td>
+      <td>/catways/:id</td>
+      <td>Supprime un catway</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr>
+
+<h2>Ressource : Réservations</h2>
+
+<p>Les réservations sont une sous-ressource de catway. Elles sont liées à un numéro de catway.</p>
+
+<table border="1" cellpadding="5">
+  <thead>
+    <tr>
+      <th>Méthode</th>
+      <th>Route</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GET</td>
+      <td>/catways/:id/reservations</td>
+      <td>Liste les réservations associées à un catway</td>
+    </tr>
+    <tr>
+      <td>GET</td>
+      <td>/catways/:id/reservations/:idReservation</td>
+      <td>Récupère une réservation spécifique</td>
+    </tr>
+    <tr>
+      <td>POST</td>
+      <td>/catways/:id/reservations</td>
+      <td>Crée une réservation pour un catway</td>
+    </tr>
+    <tr>
+      <td>PUT</td>
+      <td>/catways/:id/reservations/:idReservation</td>
+      <td>Modifie une réservation existante</td>
+    </tr>
+    <tr>
+      <td>DELETE</td>
+      <td>/catways/:id/reservations/:idReservation</td>
+      <td>Supprime une réservation</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr>
+
+<h2>Ressource : Utilisateurs</h2>
+
+<p>Les utilisateurs correspondent aux membres de la capitainerie.</p>
+
+<table border="1" cellpadding="5">
+  <thead>
+    <tr>
+      <th>Méthode</th>
+      <th>Route</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GET</td>
+      <td>/users</td>
+      <td>Liste tous les utilisateurs</td>
+    </tr>
+    <tr>
+      <td>GET</td>
+      <td>/users/:email</td>
+      <td>Récupère les détails d’un utilisateur</td>
+    </tr>
+    <tr>
+      <td>POST</td>
+      <td>/users</td>
+      <td>Crée un nouvel utilisateur</td>
+
+<%- include('partials/footer'); %>
