@@ -1,7 +1,8 @@
-<%- include('layout'); %>
+<%- include('partials/header'); %>
 
 <h1>Gestion des réservations</h1>
 
+<h2>Liste des réservations</h2>
 <table border="1" cellpadding="5">
   <thead>
     <tr>
@@ -10,17 +11,86 @@
       <th>Bateau</th>
       <th>Début</th>
       <th>Fin</th>
+      <th>Actions</th>
     </tr>
   </thead>
   <tbody>
-    <% reservations.forEach(r => { %>
+    <% if (reservations.length === 0) { %>
       <tr>
-        <td><%= r.catwayNumber %></td>
-        <td><%= r.clientName %></td>
-        <td><%= r.boatName %></td>
-        <td><%= r.startDate.toLocaleDateString('fr-FR') %></td>
-        <td><%= r.endDate.toLocaleDateString('fr-FR') %></td>
+        <td colspan="6">Aucune réservation pour le moment.</td>
       </tr>
-    <% }) %>
+    <% } else { %>
+      <% reservations.forEach(r => { %>
+        <tr>
+          <td><%= r.catwayNumber %></td>
+          <td>
+            <!-- Formulaire de mise à jour -->
+            <form action="/reservations-page/update/<%= r._id %>" method="POST">
+              <input
+                type="text"
+                name="clientName"
+                value="<%= r.clientName %>"
+                placeholder="Nom du client"
+                required
+              />
+          </td>
+          <td>
+              <input
+                type="text"
+                name="boatName"
+                value="<%= r.boatName %>"
+                placeholder="Nom du bateau"
+                required
+              />
+          </td>
+          <td>
+              <input
+                type="date"
+                name="startDate"
+                value="<%= r.startDate.toISOString().slice(0,10) %>"
+                required
+              />
+          </td>
+          <td>
+              <input
+                type="date"
+                name="endDate"
+                value="<%= r.endDate.toISOString().slice(0,10) %>"
+                required
+              />
+          </td>
+          <td>
+              <button type="submit">Mettre à jour</button>
+            </form>
+
+            <form action="/reservations-page/delete/<%= r._id %>" method="POST" onsubmit="return confirm('Supprimer cette réservation ?');" style="margin-top:4px;">
+              <button type="submit">Supprimer</button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    <% } %>
   </tbody>
 </table>
+
+<h2>Créer une réservation</h2>
+<form action="/reservations-page/create" method="POST">
+  <label>Numéro de catway :</label>
+  <input type="number" name="catwayNumber" required />
+
+  <label>Nom du client :</label>
+  <input type="text" name="clientName" required />
+
+  <label>Nom du bateau :</label>
+  <input type="text" name="boatName" required />
+
+  <label>Date de début :</label>
+  <input type="date" name="startDate" required />
+
+  <label>Date de fin :</label>
+  <input type="date" name="endDate" required />
+
+  <button type="submit">Créer</button>
+</form>
+
+<%- include('partials/footer'); %>

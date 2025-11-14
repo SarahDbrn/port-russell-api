@@ -69,20 +69,152 @@ app.use('/users', userRoutes);
 app.use('/catways', requireAuth, catwayRoutes);
 app.use('/catways/:id/reservations', requireAuth, reservationRoutes);
 
-// ====== PAGES EJS PROTÉGÉES ======
+// ====== PAGES EJS PROTÉGÉES + FORMULAIRES CRUD ======
+
+// ---- CATWAYS ----
+
+// Affichage de la page catways
 app.get('/catways-page', requireAuth, async (req, res) => {
   const catways = await Catway.find();
   res.render('catways', { user: req.user, catways });
 });
 
+// Création d'un catway
+app.post('/catways-page/create', requireAuth, async (req, res) => {
+  try {
+    const { catwayNumber, catwayType, catwayState } = req.body;
+    await Catway.create({ catwayNumber, catwayType, catwayState });
+    res.redirect('/catways-page');
+  } catch (error) {
+    console.error(error);
+    res.status(400).send('Erreur lors de la création du catway');
+  }
+});
+
+// Mise à jour de l'état d'un catway
+app.post('/catways-page/update/:catwayNumber', requireAuth, async (req, res) => {
+  try {
+    await Catway.findOneAndUpdate(
+      { catwayNumber: req.params.catwayNumber },
+      { catwayState: req.body.catwayState },
+      { new: true }
+    );
+    res.redirect('/catways-page');
+  } catch (error) {
+    console.error(error);
+    res.status(400).send('Erreur lors de la mise à jour du catway');
+  }
+});
+
+// Suppression d'un catway
+app.post('/catways-page/delete/:catwayNumber', requireAuth, async (req, res) => {
+  try {
+    await Catway.findOneAndDelete({ catwayNumber: req.params.catwayNumber });
+    res.redirect('/catways-page');
+  } catch (error) {
+    console.error(error);
+    res.status(400).send('Erreur lors de la suppression du catway');
+  }
+});
+
+// ---- RÉSERVATIONS ----
+
+// Affichage de la page réservations
 app.get('/reservations-page', requireAuth, async (req, res) => {
   const reservations = await Reservation.find();
   res.render('reservations', { user: req.user, reservations });
 });
 
+// Création d'une réservation
+app.post('/reservations-page/create', requireAuth, async (req, res) => {
+  try {
+    const { catwayNumber, clientName, boatName, startDate, endDate } = req.body;
+    await Reservation.create({
+      catwayNumber,
+      clientName,
+      boatName,
+      startDate,
+      endDate
+    });
+    res.redirect('/reservations-page');
+  } catch (error) {
+    console.error(error);
+    res.status(400).send('Erreur lors de la création de la réservation');
+  }
+});
+
+// Mise à jour d'une réservation
+app.post('/reservations-page/update/:id', requireAuth, async (req, res) => {
+  try {
+    const { clientName, boatName, startDate, endDate } = req.body;
+    await Reservation.findByIdAndUpdate(
+      req.params.id,
+      { clientName, boatName, startDate, endDate },
+      { new: true, runValidators: true }
+    );
+    res.redirect('/reservations-page');
+  } catch (error) {
+    console.error(error);
+    res.status(400).send('Erreur lors de la mise à jour de la réservation');
+  }
+});
+
+// Suppression d'une réservation
+app.post('/reservations-page/delete/:id', requireAuth, async (req, res) => {
+  try {
+    await Reservation.findByIdAndDelete(req.params.id);
+    res.redirect('/reservations-page');
+  } catch (error) {
+    console.error(error);
+    res.status(400).send('Erreur lors de la suppression de la réservation');
+  }
+});
+
+// ---- UTILISATEURS ----
+
+// Affichage de la page utilisateurs
 app.get('/users-page', requireAuth, async (req, res) => {
   const users = await User.find().select('-password');
   res.render('users', { user: req.user, users });
+});
+
+// Création d'un utilisateur
+app.post('/users-page/create', requireAuth, async (req, res) => {
+  try {
+    const { username, email, password } = req.body;
+    await User.create({ username, email, password });
+    res.redirect('/users-page');
+  } catch (error) {
+    console.error(error);
+    res.status(400).send('Erreur lors de la création de l\'utilisateur');
+  }
+});
+
+// Mise à jour d'un utilisateur
+app.post('/users-page/update/:id', requireAuth, async (req, res) => {
+  try {
+    const { username, email } = req.body;
+    await User.findByIdAndUpdate(
+      req.params.id,
+      { username, email },
+      { new: true, runValidators: true }
+    );
+    res.redirect('/users-page');
+  } catch (error) {
+    console.error(error);
+    res.status(400).send('Erreur lors de la mise à jour de l\'utilisateur');
+  }
+});
+
+// Suppression d'un utilisateur
+app.post('/users-page/delete/:id', requireAuth, async (req, res) => {
+  try {
+    await User.findByIdAndDelete(req.params.id);
+    res.redirect('/users-page');
+  } catch (error) {
+    console.error(error);
+    res.status(400).send('Erreur lors de la suppression de l\'utilisateur');
+  }
 });
 
 // ====== LANCEMENT DU SERVEUR ======
