@@ -1,39 +1,66 @@
 # Port de Plaisance Russell – API & Dashboard
 
-Cette application est une API privée avec une interface web simple permettant à la capitainerie du **Port de Plaisance Russell** de gérer :
+Cette application est une **API privée** accompagnée d’une interface web simple permettant à la capitainerie du **Port de Plaisance Russell** de gérer :
 
 - les **catways** (petits appontements),
 - les **réservations**,
-- les **utilisateurs** de la capitainerie.
+- les **utilisateurs** (membres de la capitainerie).
 
-Elle a été développée dans le cadre d’un devoir : création d’une API Express avec base MongoDB, authentification et tableau de bord.
+Ce projet a été développé dans le cadre d’un devoir : mise en place d’une API REST avec Express, MongoDB (Atlas), authentification JWT, pages EJS et déploiement en ligne.
 
 ---
 
-## 🧰 Stack technique
+# 🌐 Application hébergée
+
+👉 **https://port-russell-api-j1ex.onrender.com**
+
+Vous pouvez accéder :
+
+- à la **page d’accueil** (connexion),
+- au **dashboard** après authentification,
+- aux pages de gestion (catways, réservations, utilisateurs),
+- à la **documentation API** disponible à `/docs`.
+
+---
+
+# 🧰 Stack technique
 
 - **Node.js / Express**
-- **MongoDB / Mongoose**
-- **EJS** pour les vues serveur
-- **JWT** + cookies HTTP-only pour l’authentification
+- **MongoDB Atlas / Mongoose**
+- **EJS** (templates serveur)
+- **JWT** + cookies HTTP-only (auth sécurisée)
+- **Render.com** (hébergement)
 
 ---
 
-## 🚀 Fonctionnalités principales
+# 🚀 Fonctionnalités principales
 
-- Authentification par **email + mot de passe**
-- Gestion des **catways** (CRUD complet côté API)
-- Gestion des **réservations** (CRUD complet, sous-ressource de catway)
-- Gestion des **utilisateurs** (CRUD complet côté API)
-- Interface web avec :
-  - page d’accueil + formulaire de connexion,
-  - **tableau de bord** (dashboard),
-  - pages de gestion (catways, réservations, utilisateurs),
-  - page de **documentation de l’API**.
+### ✔️ Authentification
+- Connexion via **email + mot de passe**
+- JWT envoyé dans un **cookie HTTP-only**
+- Middleware d’auth sécurisant toutes les routes sensibles
+
+### ✔️ Gestion des catways
+- CRUD complet  
+- Règles : catwayNumber unique, type `long` ou `short`, état modifiable
+
+### ✔️ Gestion des réservations
+- CRUD complet  
+- Sous-ressource de catway : `/catways/:id/reservations`
+- Validation : endDate > startDate
+
+### ✔️ Gestion des utilisateurs
+- CRUD complet (email unique + mot de passe hashé)
+
+### ✔️ Interface web
+- Page d’accueil + connexion  
+- Tableau de bord avec réservations en cours  
+- Pages de gestion (catways, réservations, utilisateurs)  
+- Documentation API
 
 ---
 
-## 📂 Structure du projet (simplifiée)
+# 📂 Structure du projet
 
 ```txt
 .
