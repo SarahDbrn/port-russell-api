@@ -1,0 +1,40 @@
+<%- include('layout'); %>
+
+<h1>Gestion des catways</h1>
+
+<h2>Liste</h2>
+<table border="1" cellpadding="5">
+  <thead>
+    <tr>
+      <th>Numéro</th>
+      <th>Type</th>
+      <th>État</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% catways.forEach(c => { %>
+      <tr>
+        <td><%= c.catwayNumber %></td>
+        <td><%= c.catwayType %></td>
+        <td><%= c.catwayState %></td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>
+
+<h2>Ajouter un catway</h2>
+<form action="/catways" method="POST">
+  <label>Numéro :</label>
+  <input type="number" name="catwayNumber" required />
+
+  <label>Type :</label>
+  <select name="catwayType" required>
+    <option value="short">short</option>
+    <option value="long">long</option>
+  </select>
+
+  <label>État :</label>
+  <input type="text" name="catwayState" />
+
+  <button type="submit">Créer</button>
+</form>

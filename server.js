@@ -26,7 +26,7 @@ const catwayRoutes = require('./routes/catwayRoutes');
 const reservationRoutes = require('./routes/reservationRoutes');
 
 // Middleware d’auth (ex: vérification du JWT dans le cookie)
-const requireAuth = require('./middleware/requireAuth');
+const requireAuth = require('./middleware/authMiddleware');
 
 // Routes d’auth (POST /login, GET /logout)
 app.use(authRoutes);

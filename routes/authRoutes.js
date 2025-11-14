@@ -18,10 +18,20 @@ router.post('/login', async (req, res) => {
 
   try {
     const user = await User.findOne({ email });
-    if (!user) return res.status(401).render('index', { error: 'Utilisateur inconnu', user: null });
+    if (!user) {
+      return res.status(401).render('index', {
+        error: 'Utilisateur inconnu',
+        user: null
+      });
+    }
 
-    const isMatch = await user.comparePassword(password);
-    if (!isMatch) return res.status(401).render('index', { error: 'Mot de passe incorrect', user: null });
+    const isMatch = await user.matchPassword(password); // ✅ ICI
+    if (!isMatch) {
+      return res.status(401).render('index', {
+        error: 'Mot de passe incorrect',
+        user: null
+      });
+    }
 
     const token = createToken(user);
 
