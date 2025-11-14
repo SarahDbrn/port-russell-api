@@ -1,7 +1,9 @@
+// middleware/requireAuth.js
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
 module.exports = async function (req, res, next) {
+
   // Récupération du token depuis cookie (front) ou Authorization header (API Postman)
   const token =
     req.cookies?.token ||
@@ -42,7 +44,6 @@ module.exports = async function (req, res, next) {
     }
 
     return res.redirect('/');
+
   }
 };
-
-module.exports = auth;
